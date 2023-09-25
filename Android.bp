@@ -1,0 +1,39 @@
+soong_config_module_type {
+    name: "mithorium_kernel_cc_defaults",
+    module_type: "cc_defaults",
+    config_namespace: "MITHORIUM_KERNEL",
+    value_variables: ["DEVICE"],
+    properties: ["export_include_dirs"],
+}
+
+mithorium_kernel_cc_defaults {
+    name: "mithorium_kernel_defaults",
+    soong_config_variables: {
+        DEVICE: {
+            export_include_dirs: [
+                "%s/kernel_headers/audio/include/uapi",
+                "%s/kernel_headers/include",
+                "%s/kernel_headers/techpack/audio/include",
+            ],
+        },
+    },
+}
+
+cc_library_headers {
+    name: "qti_kernel_headers",
+    defaults: ["mithorium_kernel_defaults"],
+    recovery_available: true,
+    vendor_available: true,
+}
+
+cc_library_headers {
+    name: "generated_kernel_headers",
+    header_libs: [
+        "qti_kernel_headers",
+    ],
+    export_header_lib_headers: [
+        "qti_kernel_headers",
+    ],
+    recovery_available: true,
+    vendor_available: true,
+}
